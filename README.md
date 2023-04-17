@@ -16,3 +16,7 @@
         services.AddScoped<WebSearchEngineSkill>();
         
 ```
+
+
+## NOTES:
+1. When you first setup google custom search, the first API query might return errors until you validate with the link provided. Try it in a browser first to get the json response, then click the provided link to enable the API.
