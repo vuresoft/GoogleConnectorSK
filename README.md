@@ -3,7 +3,9 @@
 - Simple connector forked from the existing Bing connector.
 - Setup a Google search connector at https://developers.google.com/custom-search/v1/overview
 - Add config values (apikey and custom google search engine ID) to settings file
+      - see example: https://github.com/vuresoft/GoogleConnectorSK/blob/main/settings.json
 - Add config properties to the WebSearchOptions file (for strongly typed config)
+      - see example: https://github.com/vuresoft/GoogleConnectorSK/blob/main/WebSearchOptions.cs     
 - Add connector through dependancy injection :
 
 ```c#
