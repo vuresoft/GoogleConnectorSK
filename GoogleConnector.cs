@@ -47,7 +47,7 @@ namespace SkTestApp.Handlers.Connectors
             Uri uri = new($"https://customsearch.googleapis.com/customsearch/v1?key={apiKey}&cx={cseId}&num={resultsCount}&q={Uri.EscapeDataString(query)}");
 
 
-            this._logger.LogDebug("WebSearch Sending request: {0}", uri);
+            this._logger.LogDebug("WebSearch Sending request query: {0}", query);
             HttpResponseMessage response = await this._httpClient.GetAsync(uri, cancellationToken);
             response.EnsureSuccessStatusCode();
             this._logger.LogDebug("WebSearch Response received: {0}", response.StatusCode);
