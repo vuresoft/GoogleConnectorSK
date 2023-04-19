@@ -56,19 +56,20 @@ namespace SkTestApp.Handlers.Connectors
             this._logger.LogTrace("WebSearch Response content received: {0}", json);
 
             GoogleSearchResponse? data = JsonSerializer.Deserialize<GoogleSearchResponse>(json);
-            Item? firstResult = data?.Items?.FirstOrDefault();
 
-            if (firstResult == null)
+            if (int.Parse(data?.SearchInformation.TotalResults) >= 1)
             {
-                _logger.LogWarning("WebSearch - No results found for query:");
+                result = ParseSnippetsAndUrlsAsString(data) ?? string.Empty;
+
+                Item? firstResult = data?.Items?.FirstOrDefault();
+                this._logger.LogDebug("Google Result: {0}, {1}, {2}",
+                    firstResult?.Title,
+                    firstResult?.Url,
+                    firstResult?.Snippet);
+                return result;
             }
-            else result = ParseSnippetsAndUrlsAsString(data) ?? string.Empty;
-
-            this._logger.LogDebug("Google Result: {0}, {1}, {2}",
-                firstResult?.Title,
-                firstResult?.Url,
-                firstResult?.Snippet);
-
+            else
+                _logger.LogWarning("Google - No results found for query:");
             return result;
         }
 
@@ -102,13 +103,16 @@ namespace SkTestApp.Handlers.Connectors
             GC.SuppressFinalize(this);
         }
 
-
-        [SuppressMessage("Performance", "CA1812:Internal class that is apparently never instantiated",
+    [SuppressMessage("Performance", "CA1812:Internal class that is apparently never instantiated",
             Justification = "Class is instantiated through deserialization.")]
         private sealed class GoogleSearchResponse
         {
             [JsonPropertyName("items")]
             public Item[]? Items { get; set; }
+
+            [JsonPropertyName("searchInformation")]
+            public SearchInformation? SearchInformation { get; set; }
+
         }
 
         [SuppressMessage("Performance", "CA1812:Internal class that is apparently never instantiated",
@@ -123,6 +127,14 @@ namespace SkTestApp.Handlers.Connectors
 
             [JsonPropertyName("snippet")]
             public string Snippet { get; set; } = string.Empty;
+        }
+
+        [SuppressMessage("Performance", "CA1812:Internal class that is apparently never instantiated",
+        Justification = "Class is instantiated through deserialization.")]
+        private sealed class SearchInformation
+        {
+            [JsonPropertyName("totalResults")]
+            public string TotalResults { get; set; }
         }
     }
 
